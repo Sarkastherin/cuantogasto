@@ -24,12 +24,57 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+const SITE_URL = "https://cuantogastar.netlify.app";
+const SITE_TITLE = "¿Cuánto Gastar? — Calculadora de Reintegro";
+const SITE_DESCRIPTION =
+  "Calculá en segundos cuánto tenés que gastar para aprovechar el reintegro completo de tu tarjeta. Ingresá el porcentaje de descuento y el tope máximo, y listo.";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "¿Cuánto Gastar?",
+  description: SITE_DESCRIPTION,
+  url: SITE_URL,
+  applicationCategory: "FinanceApplication",
+  operatingSystem: "All",
+  inLanguage: "es-AR",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "ARS" },
+  author: {
+    "@type": "Person",
+    name: "Kathe",
+    url: "https://linktr.ee/kathe.systems",
+  },
+};
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {/* Canonical */}
+        <link rel="canonical" href={SITE_URL + "/"} />
+
+        {/* Open Graph — necesarios en el HTML estático para WhatsApp, Telegram, etc. */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={SITE_URL + "/"} />
+        <meta property="og:title" content={SITE_TITLE} />
+        <meta property="og:description" content={SITE_DESCRIPTION} />
+        <meta property="og:locale" content="es_AR" />
+        <meta property="og:site_name" content="¿Cuánto Gastar?" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={SITE_TITLE} />
+        <meta name="twitter:description" content={SITE_DESCRIPTION} />
+
+        {/* JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+
         <Meta />
         <Links />
       </head>
