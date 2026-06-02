@@ -2,6 +2,8 @@ import { Card, Label, TextInput, DarkThemeToggle } from "flowbite-react";
 import { useMemo, useState } from "react";
 import { HiOutlineReceiptRefund } from "react-icons/hi2";
 import { NavLink } from "react-router";
+import { Button } from "flowbite-react";
+import { HiOutlineShare } from "react-icons/hi";
 
 export default function HomePage() {
   const [discount, setDiscount] = useState("");
@@ -21,7 +23,46 @@ export default function HomePage() {
       finalPrice: spend - r,
     };
   }, [discount, refund]);
+  const handleShareApp = async () => {
+    const shareData = {
+      title: "¿Cuánto gastar?",
+      text: "Calculá cuánto debes gastar para aprovechar al máximo un reintegro.",
+      url: window.location.origin,
+    };
 
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        return;
+      }
+
+      await navigator.clipboard.writeText(window.location.origin);
+    } catch {}
+  };
+
+  const handleShareResult = async () => {
+    if (!result) return;
+
+    const text =
+      `💸 Promo calculada con ¿Cuánto gastar?\n\n` +
+      `📉 Descuento: ${discount}%\n` +
+      `💰 Tope de reintegro: $${Number(refund).toLocaleString("es-AR")}\n\n` +
+      `👉 Debes gastar hasta $${result.spend.toLocaleString("es-AR")}\n` +
+      `🤑 Ahorras $${result.refund.toLocaleString("es-AR")}\n\n` +
+      `${window.location.origin}`;
+
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: "Resultado de promoción",
+          text,
+        });
+        return;
+      }
+
+      await navigator.clipboard.writeText(text);
+    } catch {}
+  };
   return (
     <div className="min-h-dvh bg-gray-50 dark:bg-gray-950">
       <DarkThemeToggle />
@@ -111,6 +152,18 @@ export default function HomePage() {
             Hecho para quienes persiguen descuentos como deporte olímpico.
           </p>
         </Card>
+
+        <div className="mt-3 flex justify-center gap-2">
+          <Button color="light" onClick={handleShareApp}>
+            <HiOutlineShare className="mr-2 h-5 w-5" />
+            Compartir app
+          </Button>
+
+          <Button color="light" onClick={handleShareResult} disabled={!result}>
+            <HiOutlineShare className="mr-2 h-5 w-5" />
+            Compartir resultado
+          </Button>
+        </div>
 
         <span className="mt-3 text-center text-xs text-gray-400">
           Hecho con ❤️ por{" "}
