@@ -1,13 +1,13 @@
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
+import  HomePage  from "../welcome/welcome";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Base Repo" },
-    { name: "description", content: "Stack base para nuevos proyectos con React Router, Tailwind, Flowbite y más." },
+    { title: "¿Cuánto Gastar?" },
+    { name: "description", content: "Calcula cuánto debes gastar para obtener el reintegro completo." },
   ];
 }
 
 export default function Home() {
-  return <Welcome />;
+  return <HomePage />;
 }
